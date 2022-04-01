@@ -1,0 +1,6 @@
+[core]
+    remote = remotes3
+['remote "s3remote"']
+    url = s3://buckets/fadelmlops
+['remote "remotes3"']
+    url = s3://fadelmlops/data

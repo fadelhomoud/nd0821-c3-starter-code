@@ -1,3 +1,5 @@
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 
 
@@ -18,10 +20,13 @@ def train_model(X_train, y_train):
         Trained machine learning model.
     """
 
-    pass
+    
+    model = RandomForestClassifier(random_state=221)
+    model.fit(X_train, y_train)
+    return model
 
 
-def compute_model_metrics(y, preds):
+def compute_model_metrics(y, preds, as_df = False):
     """
     Validates the trained machine learning model using precision, recall, and F1.
 
@@ -57,4 +62,26 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    pass
+    return model.predict(X)
+
+def slice_performance(data, X,Y, model, cat_features):
+    data['preds'] = inference(model, X)
+    data['y_true'] = Y
+    perf_df = pd.DataFrame()
+    for category in cat_features:
+        for val in data[category].unique():
+            
+            slice_df = data[data[category]==val]
+            precision, recall, fbeta= compute_model_metrics(slice_df['y_true'], slice_df['preds'])
+            
+            perf_df = pd.concat([perf_df, pd.DataFrame(
+                {"Category": [category],
+                'Value': [val],
+                'precision': [precision],
+                 'recall': [recall],
+                  'fbeta' : [fbeta]})
+                  ])
+    
+    
+    return perf_df.reset_index(drop=True)
+
