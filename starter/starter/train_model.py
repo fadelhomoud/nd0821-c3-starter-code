@@ -8,7 +8,7 @@ from starter.ml.model import train_model, compute_model_metrics, inference, slic
 from starter.ml.data import process_data
 
 # Add code to load in the data.
-data = pd.read_csv("./starter/data/cleaned_census.csv")
+data = pd.read_csv("starter/data/cleaned_census.csv")
 
 # Optional enhancement, use K-fold cross validation instead of a
 # train-test split.
