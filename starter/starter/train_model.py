@@ -10,7 +10,8 @@ from starter.ml.data import process_data
 # Add code to load in the data.
 data = pd.read_csv("./data/cleaned_census.csv")
 
-# Optional enhancement, use K-fold cross validation instead of a train-test split.
+# Optional enhancement, use K-fold cross validation instead of a
+# train-test split.
 train, test = train_test_split(data, test_size=0.20)
 
 cat_features = [
@@ -47,8 +48,8 @@ X_slice, y_slice, encoder, lb = process_data(
     encoder=encoder, lb=lb
 )
 
-slices_df = slice_performance(data,X_slice,y_slice,model, cat_features)
-with open("slice_output.txt",'w') as file:
+slices_df = slice_performance(data, X_slice, y_slice, model, cat_features)
+with open("slice_output.txt", 'w') as file:
     print(slices_df.to_string(), file=file)
 
 

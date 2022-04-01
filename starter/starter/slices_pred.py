@@ -24,7 +24,6 @@ def check_slices_performance(data, model_path):
     with open(os.path.join(model_path, "label_encoder.pkl"), "rb") as file:
         lb = pickle.load(file)
 
-
     # Processing data:
     X_val, y_val, encoder, lb = process_data(
         data, categorical_features=cat_features, label="salary",
@@ -42,20 +41,21 @@ def check_slices_performance(data, model_path):
     for group in cat_features:
 
         performance = data.groupby(group).apply(
-            lambda df: compute_model_metrics(df["label"], df["pred"], as_df=True)
-        )
+            lambda df: compute_model_metrics(
+                df["label"], df["pred"], as_df=True))
         performance = performance.droplevel(1)
         performance.index.name = "group_value"
         performance["group"] = group
         slice_results = slice_results.append(performance)
 
     slice_results = slice_results.reset_index()
-    slice_results = slice_results[["group","group_value","precision","recall","fbeta"]]
+    slice_results = slice_results[[
+        "group", "group_value", "precision", "recall", "fbeta"]]
 
     return slice_results
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     # Loading the data:
     data = pd.read_csv("./starter/data/cleaned_census.csv")
@@ -67,5 +67,5 @@ if __name__=="__main__":
     # Printing results to file:
     pd.set_option('display.max_rows', None)
     pd.set_option('display.max_rows', None)
-    with open("slice_output.txt",'w') as file:
+    with open("slice_output.txt", 'w') as file:
         print(output.to_string(), file=file)

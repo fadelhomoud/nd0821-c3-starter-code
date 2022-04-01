@@ -3,13 +3,14 @@ from main import app
 
 client = TestClient(app)
 
+
 def test_get():
     '''
     This test that the message in the root page is as expected
     '''
     r = client.get("/")
     assert r.status_code == 200
-    assert r.json() ==  "Welcome to the inference API!"
+    assert r.json() == "Welcome to the inference API!"
 
 
 def test_post_more_than_50k():
@@ -67,8 +68,9 @@ def test_post_less_than_50k():
 
 def test_post_input():
     '''
-    This test that this input will result in an error given gender and country are not valid inputs
-    '''    
+    This test that this input will result in an error given
+    that gender and country are not valid inputs
+    '''
     body = {
         'age': 20,
         'workclass': 'Private',

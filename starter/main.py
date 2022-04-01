@@ -1,7 +1,6 @@
 # Put the code for your API here.
 
 import pickle
-import os
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 import pandas as pd
@@ -22,6 +21,7 @@ with open("model/label_encoder.pkl", "rb") as file:
 
 app = FastAPI()
 
+
 class PostBody(BaseModel):
 
     age: int
@@ -38,6 +38,7 @@ class PostBody(BaseModel):
     capital_loss: int = Field(alias="capital-loss")
     hours_per_week: int = Field(alias="hours-per-week")
     native_country: str = Field(alias="native-country")
+
     class Config:
         schema_extra = {
             "example": {
@@ -55,13 +56,14 @@ class PostBody(BaseModel):
                 'capital-loss': 5000,
                 'hours-per-week': 45,
                 'native-country': 'England'
-                }
+            }
         }
 
 
 @app.get("/")
 async def return_greetings():
     return "Welcome to the inference API!"
+
 
 @app.post("/inference")
 async def model_inference(data: PostBody):
@@ -78,5 +80,5 @@ async def model_inference(data: PostBody):
 
     pred = model.predict(data)
     pred = lb.inverse_transform(pred)
-    
-    return {"prediction":pred.tolist()}
+
+    return {"prediction": pred.tolist()}
